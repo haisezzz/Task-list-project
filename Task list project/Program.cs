@@ -13,7 +13,7 @@
       Console.Clear();
       Console.WriteLine("Welcome to the What Should My Husband Do Today app!");
       Console.WriteLine("- - - - - - - - - - - - - - - - - - - - - - - - - -");
-      Console.WriteLine("Please select an optiom:");
+      Console.WriteLine("Please select an option:");
       Console.WriteLine("1. Give him a new task");
       Console.WriteLine("2. Remove a task");
       Console.WriteLine("3. Mark a task as done");
@@ -163,7 +163,7 @@
         Console.WriteLine("Completed tasks:");
         for(int j = 0; j < completedList.Count; j++)  // loop through completed list
         {
-          Console.Write("-");
+          Console.Write("- ");
           Console.ForegroundColor = ConsoleColor.Green;
           Console.WriteLine(completedList[j]);
           Console.ResetColor();
