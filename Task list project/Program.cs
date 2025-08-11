@@ -3,6 +3,7 @@
   static void Main(string[] args)
   {
     List<string> todoList = new List<string>();  // list to hold tasks
+    List<string> completedList = new List<string>();  // list to hold completed tasks
 
     bool isRunning = true;  // main loop
     while(isRunning)
@@ -67,7 +68,7 @@
         Console.WriteLine();
         Console.WriteLine($"Task added successfully!");
       }
-        Console.WriteLine("Press any key to go back to main menu.");
+      Console.WriteLine("Press any key to go back to main menu.");
       Console.ReadKey();
     }
 
@@ -77,7 +78,7 @@
       Console.WriteLine("Which task would you like to remove?");
       for(int i = 0; i < todoList.Count; i++)  // loop through tasks
       {
-        Console.Write($"{i + 1}. ");
+        Console.Write($"{i + 1}. ");  // display task number before changing task color
         Console.ForegroundColor = ConsoleColor.Red;
         Console.WriteLine(todoList[i]);
         Console.ResetColor();
@@ -87,7 +88,8 @@
       int.TryParse(choice, out int taskNumber);
       if(taskNumber > 0 && taskNumber <= todoList.Count)  // check if choice is valid
       {
-        todoList.RemoveAt(taskNumber - 1);  // remove task
+        todoList.RemoveAt(taskNumber - 1);  // -1 because list is 0-indexed
+        Console.WriteLine();
         Console.WriteLine($"Task {taskNumber} removed successfully!");
       }
       else
@@ -102,7 +104,33 @@
     void markCompleted()
     {
       Console.Clear();
-      Console.WriteLine("markCompleted function");
+      Console.WriteLine("Which task would you like to mark as done?");
+      for(int i = 0; i < todoList.Count; i++)  // loop through tasks
+      {
+        Console.Write($"{i + 1}. ");  // display number before changing task color
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine(todoList[i]);
+        Console.ResetColor();
+      }
+      Console.WriteLine();
+      string? choice = Console.ReadLine();
+      int.TryParse(choice,out int taskNumber);
+
+      if(taskNumber > 0 && taskNumber <= todoList.Count)  // check if choice is valid
+      {
+        string completedTask = todoList[taskNumber - 1];
+
+        Console.WriteLine();
+        Console.WriteLine($"Task {taskNumber} marked as done!");
+
+        todoList.RemoveAt(taskNumber - 1);  // remove task from todo list
+
+        completedList.Add(completedTask.ToLower());  // make task lowercase and add to completed list
+      }
+      else
+      {
+        Console.WriteLine("Invalid task number, please try again.");
+      }
       Console.WriteLine();
       Console.WriteLine("Press any key to continue.");
       Console.ReadKey();
@@ -125,6 +153,20 @@
         Console.WriteLine(todoList[i]);
 
         Console.ResetColor();
+
+        if(completedList.Count > 0)  // if there are completed tasks
+        {
+          Console.WriteLine();
+          Console.WriteLine("Completed tasks:");
+          for(int j = 0; j < completedList.Count; j++)  // loop through completed tasks
+          {
+            Console.Write($"- ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(completedList[j]);
+            Console.ResetColor();
+          }
+          Console.WriteLine();
+        }
       }
       Console.WriteLine();
       Console.WriteLine("Press any key to continue.");
