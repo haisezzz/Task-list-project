@@ -5,6 +5,8 @@
     List<string> todoList = new List<string>();  // list to hold tasks
     List<string> completedList = new List<string>();  // list to hold completed tasks
 
+    loadTasks();
+
     bool isRunning = true;  // main loop
     while(isRunning)
     {
@@ -39,15 +41,16 @@
             showTasks();
             break;
           case 5:
+            saveTasks();
             isRunning = false;
-            Console.WriteLine("Thank you for using the app! Byebye!");
+            Console.WriteLine("Thank you for using the app. Byebye!");
             break;
         }
       }
-      else  // if choice is not valid
+      else  // if number is not valid
       {
         Console.WriteLine("Invalid choice, please try again.");
-        Thread.Sleep(1500);
+        Thread.Sleep(1500);  // wait for 1.5 seconds before clearing the screen
       }
     }
 
@@ -118,7 +121,7 @@
 
       if(taskNumber > 0 && taskNumber <= todoList.Count)  // check if choice is valid
       {
-        string completedTask = todoList[taskNumber - 1];
+        string completedTask = todoList[taskNumber - 1];  // get task from list, -1 because list is 0-indexed
 
         Console.WriteLine();
         Console.WriteLine($"Task {taskNumber} marked as done!");
@@ -140,37 +143,90 @@
     {
       Console.Clear();
       Console.WriteLine("Current tasks:");
-      if(todoList.Count == 0)
+
+      if(todoList.Count == 0 && completedList.Count == 0)  // check if both lists are empty
       {
         Console.WriteLine("No tasks available! Maybe add one so he doesn't get too lazy...");
       }
-      for(int i = 0; i < todoList.Count; i++)  // loop through tasks
+
+      for(int i = 0; i < todoList.Count; i++)  // loop through todo list
       {
         Console.Write($"{i + 1}. ");
-
         Console.ForegroundColor = ConsoleColor.Red;
-
         Console.WriteLine(todoList[i]);
-
         Console.ResetColor();
-
-        if(completedList.Count > 0)  // if there are completed tasks
-        {
-          Console.WriteLine();
-          Console.WriteLine("Completed tasks:");
-          for(int j = 0; j < completedList.Count; j++)  // loop through completed tasks
-          {
-            Console.Write($"- ");
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write(completedList[j]);
-            Console.ResetColor();
-          }
-          Console.WriteLine();
-        }
       }
+
+      if(completedList.Count > 0)  // check if completed list is not empty
+      {
+        Console.WriteLine();
+        Console.WriteLine("Completed tasks:");
+        for(int j = 0; j < completedList.Count; j++)  // loop through completed list
+        {
+          Console.Write("-");
+          Console.ForegroundColor = ConsoleColor.Green;
+          Console.WriteLine(completedList[j]);
+          Console.ResetColor();
+        }
+        Console.WriteLine();
+      }
+
       Console.WriteLine();
       Console.WriteLine("Press any key to continue.");
       Console.ReadKey();
+    }
+
+    void saveTasks()
+    {
+      try
+      {
+        using(StreamWriter writer = new StreamWriter("tasks.txt"))  // open file for writing
+        {
+          foreach(string task in todoList)
+          {
+            writer.WriteLine($"ACTIVE:{task}");  // save active tasks with prefix
+          }
+          foreach(string task in completedList)
+          {
+            writer.WriteLine($"COMPLETED:{task}");  // save completed tasks with prefix
+          }
+        }
+        Console.WriteLine("Tasks saved successfully!");
+      }
+      catch(Exception ex)
+      {
+        Console.WriteLine($"Error saving tasks: {ex.Message}");
+      }
+    }
+
+    void loadTasks()
+    {
+      if(File.Exists("tasks.txt"))  // check if file exists
+      {
+        try
+        {
+          using(StreamReader reader = new StreamReader("tasks.txt"))  // open file for reading
+          {
+            string? line;
+            while((line = reader.ReadLine()) != null)  // read each line
+            {
+              if(line.StartsWith("ACTIVE:"))
+              {
+                todoList.Add(line.Substring(7));  // add active tasks to todo list
+              }
+              else if(line.StartsWith("COMPLETED:"))
+              {
+                completedList.Add(line.Substring(10));  // add completed tasks to completed list
+              }
+            }
+          }
+          Console.WriteLine("Tasks loaded from file.");
+        }
+        catch(Exception ex)
+        {
+          Console.WriteLine($"Error loading tasks: {ex.Message}");
+        }
+      }
     }
   }
 }
