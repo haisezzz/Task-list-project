@@ -74,7 +74,26 @@
     void removeTask()
     {
       Console.Clear();
-      Console.WriteLine("removeTask function");
+      Console.WriteLine("Which task would you like to remove?");
+      for(int i = 0; i < todoList.Count; i++)  // loop through tasks
+      {
+        Console.Write($"{i + 1}. ");
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine(todoList[i]);
+        Console.ResetColor();
+      }
+      Console.WriteLine();
+      string? choice = Console.ReadLine();
+      int.TryParse(choice, out int taskNumber);
+      if(taskNumber > 0 && taskNumber <= todoList.Count)  // check if choice is valid
+      {
+        todoList.RemoveAt(taskNumber - 1);  // remove task
+        Console.WriteLine($"Task {taskNumber} removed successfully!");
+      }
+      else
+      {
+        Console.WriteLine("Invalid task number, please try again.");
+      }
       Console.WriteLine();
       Console.WriteLine("Press any key to continue.");
       Console.ReadKey();
