@@ -2,9 +2,9 @@
 {
   static void Main(string[] args)
   {
-    string[] tasksList = new string[4];
-    
-    bool isRunning = true;
+    List<string> todoList = new List<string>();  // list to hold tasks
+
+    bool isRunning = true;  // main loop
     while(isRunning)
     {
       Console.Clear();
@@ -18,12 +18,12 @@
       Console.WriteLine("5. Exit the app");
       Console.WriteLine();
       string? input = Console.ReadLine();
-      int.TryParse(input, out int choice);
+      int.TryParse(input, out int choice);  // parse input to int
       Console.WriteLine();
 
-      if(choice <= 5)
+      if(choice <= 5)  // check if choice is valid
       {
-        switch(choice)
+        switch(choice)  // call methods based on choice
         {
           case 1:
             addTask();
@@ -43,18 +43,31 @@
             break;
         }
       }
-      else
+      else  // if choice is not valid
       {
         Console.WriteLine("Invalid choice, please try again.");
+        Thread.Sleep(1500);
       }
     }
 
     void addTask()
     {
       Console.Clear();
-      Console.WriteLine("addTask function");
+      Console.WriteLine("Write down a new task:");
       Console.WriteLine();
-      Console.WriteLine("Press any key to continue...");
+      if(todoList.Count > 5)  // check if there are too many tasks
+      {
+        Console.WriteLine("Husband has too many tasks already, tell him to finish some first! (Or remove one yourself)");
+      }
+      else
+      {
+        string? task = Console.ReadLine();
+        task = char.ToUpper(task![0]) + task.Substring(1).ToLower();  // cap the first letter lowercase the rest
+        todoList.Add(task!);
+        Console.WriteLine();
+        Console.WriteLine($"Task added successfully!");
+      }
+        Console.WriteLine("Press any key to go back to main menu.");
       Console.ReadKey();
     }
 
@@ -79,7 +92,15 @@
     void showTasks()
     {
       Console.Clear();
-      Console.WriteLine("showTasks function");
+      Console.WriteLine("Current tasks:");
+      if(todoList.Count == 0)
+      {
+        Console.WriteLine("Your husband has no tasks. Maybe add one so he doesn't get too lazy...");
+      }
+      for(int i = 0; i < todoList.Count; i++)  // show all tasks
+      {
+        Console.WriteLine($"{i + 1}. {todoList[i]}");
+      }
       Console.WriteLine();
       Console.WriteLine("Press any key to continue...");
       Console.ReadKey();
