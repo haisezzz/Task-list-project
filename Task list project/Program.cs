@@ -76,7 +76,7 @@
       Console.Clear();
       Console.WriteLine("removeTask function");
       Console.WriteLine();
-      Console.WriteLine("Press any key to continue...");
+      Console.WriteLine("Press any key to continue.");
       Console.ReadKey();
     }
 
@@ -85,7 +85,7 @@
       Console.Clear();
       Console.WriteLine("markCompleted function");
       Console.WriteLine();
-      Console.WriteLine("Press any key to continue...");
+      Console.WriteLine("Press any key to continue.");
       Console.ReadKey();
     }
 
@@ -95,14 +95,20 @@
       Console.WriteLine("Current tasks:");
       if(todoList.Count == 0)
       {
-        Console.WriteLine("Your husband has no tasks. Maybe add one so he doesn't get too lazy...");
+        Console.WriteLine("No tasks available! Maybe add one so he doesn't get too lazy...");
       }
-      for(int i = 0; i < todoList.Count; i++)  // show all tasks
+      for(int i = 0; i < todoList.Count; i++)  // loop through tasks
       {
-        Console.WriteLine($"{i + 1}. {todoList[i]}");
+        Console.Write($"{i + 1}. ");
+
+        Console.ForegroundColor = ConsoleColor.Red;
+
+        Console.WriteLine(todoList[i]);
+
+        Console.ResetColor();
       }
       Console.WriteLine();
-      Console.WriteLine("Press any key to continue...");
+      Console.WriteLine("Press any key to continue.");
       Console.ReadKey();
     }
   }
